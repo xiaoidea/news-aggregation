@@ -61,8 +61,9 @@ class TencentCrawler(object):
                 continue
             current_news, current_paragraphs = self._parse_news(url=url, title=title, category='core',
                                                                 current_time=current_time, current_date=current_date)
-            news_obj_list.append(current_news)
-            para_obj_list.append(current_paragraphs)
+            if len(current_paragraphs) > 0:
+                news_obj_list.append(current_news)
+                para_obj_list.append(current_paragraphs)
 
         return news_obj_list, para_obj_list
 
