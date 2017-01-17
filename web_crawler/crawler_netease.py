@@ -1,0 +1,3 @@
+
+class NeteaseCrawler(object):
+    pass

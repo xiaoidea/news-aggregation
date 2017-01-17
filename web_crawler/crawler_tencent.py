@@ -1,4 +1,12 @@
 # coding: utf-8
+
+"""
+QQ spider
+
+get news from www.qq.com
+
+"""
+
 import time
 
 import requests
@@ -101,9 +109,3 @@ class TencentCrawler(object):
                 elif p.string is not None and len(p.string) > 0:
                     current_paragraphs.append(Paragraph(para_content=p.string, is_image=0, date=current_date))
         return current_news, current_paragraphs
-
-
-if __name__ == '__main__':
-    tc = TencentCrawler()
-    tc.start_spider()
-

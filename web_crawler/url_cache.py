@@ -1,8 +1,10 @@
 # coding: utf-8
 
-import MySQLdb
 import time
-from db_property import host, user, port, passwd, db
+
+import MySQLdb
+
+from config import host, user, port, passwd, db
 
 
 def _get_conn():
@@ -14,10 +16,10 @@ class URLCache(object):
     """ read url which has already crawled from db into a set
 
     """
+    conn = _get_conn()
     try:
         source_dict = dict()
         date = time.strftime("%Y-%m-%d", time.localtime())
-        conn = _get_conn()
         cursor = conn.cursor()
         sql = 'SELECT url, source FROM cached_url WHERE date = %s'
         cursor.execute(sql, (date,))
@@ -29,6 +31,8 @@ class URLCache(object):
                 source_dict[row[1]] = set()
     except Exception as e:
         print e
+    finally:
+        conn.close()
 
     @staticmethod
     def need_and_add(url, source):
