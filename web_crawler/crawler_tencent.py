@@ -6,7 +6,12 @@ from bs4 import BeautifulSoup
 
 from model.news import News
 from model.paragraph import Paragraph
+from url_cache import URLCache
 import image_tool
+import sys
+
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 
 class TencentCrawler(object):
@@ -52,6 +57,8 @@ class TencentCrawler(object):
         news_obj_list = []
         para_obj_list = []
         for (url, title) in news_list:
+            if not URLCache.need_and_add(url, 'tencent'):
+                continue
             current_news, current_paragraphs = self._parse_news(url=url, title=title, category='core',
                                                                 current_time=current_time, current_date=current_date)
             news_obj_list.append(current_news)

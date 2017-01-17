@@ -1,16 +1,14 @@
 # coding: utf-8
 
+import sys
+
 import MySQLdb
 
 from crawler_tencent import TencentCrawler
+from db_property import host, user, port, passwd, db
 
-# MySQL connection
-host = '127.0.0.1'
-port = 3306
-user = 'root'
-passwd = 'root'
-charset = 'utf-8'
-db = 'news'
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 
 class CrawlAndStore(object):
@@ -21,14 +19,16 @@ class CrawlAndStore(object):
             self._store(news, paragraph_list)
 
     def _store(self, news, paragraph_list):
-        conn = MySQLdb.connect(host=host, port=port, passwd=passwd, db=db, charset=charset)
+        conn = MySQLdb.connect(host=host, user=user, port=port, passwd=passwd, db=db, charset="utf8")
         try:
             cursor = conn.cursor()
             sql_news = 'INSERT INTO news_item VALUES (NULL, %s, %s, %s, %s, %s, %s)'
-            news_id = cursor.execute(sql_news, news.source, news.url, news.title, news.category, news.last_update_time, news.date)
-            sql_para = 'INSERT INTO news_paragraph VALUES (NULL, %d, %s, %d, %s)'
+            cursor.execute(sql_news, self._transform_news(news))
+            news_id = conn.insert_id()
+            sql_para = 'INSERT INTO news_paragraph VALUES (NULL, %s, %s, %s, %s)'
             for paragraph in paragraph_list:
-                cursor.execute(sql_para, news_id, paragraph.para_content, paragraph.is_image, paragraph.date)
+                cursor.execute(sql_para,
+                               (int(news_id), paragraph.para_content, int(paragraph.is_image), paragraph.date))
             conn.commit()
         except Exception as e:
             conn.rollback()
@@ -36,11 +36,17 @@ class CrawlAndStore(object):
         finally:
             conn.close()
 
+    @staticmethod
+    def _transform_news(news):
+        return news.source, news.url, news.title, news.category, news.last_update_time, news.date
+
     def clean(self):
         pass
 
 
 if __name__ == '__main__':
     CAS = CrawlAndStore()
-    # CAS.collect_news()
-    conn = MySQLdb.connect(host='localhost', port=3306, user='root', passwd='root', db='news', charset=charset)
+    CAS.collect_news()
+    print "**"*100
+    print "done!"
+    print "**"*100
