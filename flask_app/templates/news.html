@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul>
+        {% for para in data %}
+        {% if para['is_image'] == 1 %}
+        <li><img src="/static/img/{{para.content}}", height="100px", width="100px"></li>
+        {% else %}
+        <li>{{ para['content'] }}</li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</body>
+</html>

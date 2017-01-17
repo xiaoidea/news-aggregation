@@ -1,11 +1,16 @@
 # coding: utf-8
 
+"""
+entrance of crawler: start the spider and store news into MySQL db
+
+"""
+
 import sys
 
 import MySQLdb
 
 from crawler_tencent import TencentCrawler
-from db_property import host, user, port, passwd, db
+from config import host, user, port, passwd, db
 
 reload(sys)
 sys.setdefaultencoding("utf-8")

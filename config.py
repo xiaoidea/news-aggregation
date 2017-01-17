@@ -4,3 +4,6 @@ port = 3306
 user = 'test'
 passwd = 'root'
 db = 'news'
+
+# flask configuration
+DEBUG = True
