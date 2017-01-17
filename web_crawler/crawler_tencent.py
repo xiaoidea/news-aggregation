@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-QQ spider
+Tencent News Spider
 
 get news from www.qq.com
 
