@@ -31,6 +31,7 @@ def tencent_core_news():
 
 def get_news_content(news_id):
     news_paragraph = []
+    title = None
     conn = _get_conn()
     try:
         cursor = conn.cursor()
@@ -43,8 +44,12 @@ def get_news_content(news_id):
                 pass
             else:
                 news_paragraph.append({"content": row[0], "is_image": row[1]})
+        sql_title = "SELECT title FROM news_item WHERE news_id = %s"
+        cursor.execute(sql_title, (news_id,))
+        result = cursor.fetchone()
+        title = result[0]
     except Exception as e:
         print e
     finally:
         conn.close()
-    return news_paragraph
+    return title, news_paragraph

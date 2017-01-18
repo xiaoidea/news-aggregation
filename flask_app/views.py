@@ -14,8 +14,8 @@ def index():
 
 @app.route("/news/<nid>")
 def news_content(nid):
-    data = models.get_news_content(nid)
-    return render_template("news.html", data=data)
+    title, paras = models.get_news_content(nid)
+    return render_template("news.html", title=title, paras=paras)
 
 
 if __name__ == '__main__':
